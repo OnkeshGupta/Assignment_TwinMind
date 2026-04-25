@@ -161,7 +161,7 @@ Keep it short. No repetition.
 
       {/* LEFT PANEL */}
       <div className="w-1/3 border-r border-gray-800 p-4 flex flex-col">
-        <h2 className="text-lg font-semibold mb-3">Transcript</h2>
+        <h2 className="text-lg font-semibold mb-3 text-gray-200">Transcript</h2>
 
         <div className="flex gap-2 mb-3">
           <button
@@ -181,32 +181,35 @@ Keep it short. No repetition.
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto text-sm whitespace-pre-wrap bg-gray-900 p-3 rounded">
+        <div className="flex-1 overflow-y-auto text-sm whitespace-pre-wrap bg-[#0f172a] p-3 rounded-lg border border-gray-800">
           {transcript || "Start speaking..."}
         </div>
       </div>
 
       {/* MIDDLE PANEL */}
       <div className="w-1/3 border-r border-gray-800 p-4 flex flex-col">
-        <h2 className="text-lg font-semibold mb-3">Suggestions</h2>
+        <h2 className="text-lg font-semibold mb-3 text-gray-200">Suggestions</h2>
 
         <button
           onClick={() => generateSuggestions(transcript)}
           disabled={!transcript.trim()}
-          className={`mb-3 px-3 py-1 rounded ${
-            transcript.trim()
-              ? "bg-gray-700 hover:bg-gray-600"
-              : "bg-gray-800 opacity-50 cursor-not-allowed"
-          }`}
+          className={`mb-3 flex items-center gap-2 px-3 py-1 rounded text-sm
+    ${
+      transcript.trim()
+        ? "bg-gray-800 hover:bg-gray-700"
+        : "bg-gray-900 opacity-50 cursor-not-allowed"
+    }`}
         >
-          <RotateCw size={16} />
+          <span className="text-xs">🔄</span>
           Reload
         </button>
 
         <div className="flex-1 overflow-y-auto space-y-3">
           {suggestionBatches.map((batch, i) => (
             <div key={i}>
-              <div className="text-xs text-gray-400 mb-1">{batch.time}</div>
+              <div className="text-xs text-gray-500 mb-2 border-b border-gray-800 pb-1">
+                {batch.time}
+              </div>
 
               {Array.isArray(batch.data) &&
                 batch.data.map((s, j) => (
@@ -235,13 +238,20 @@ Keep it short. No repetition.
 
       {/* RIGHT PANEL */}
       <div className="w-1/3 p-4 flex flex-col">
-        <h2 className="text-lg font-semibold mb-3">Chat</h2>
+        <h2 className="text-lg font-semibold mb-3 text-gray-200">Chat</h2>
 
         <div className="flex-1 overflow-y-auto space-y-3 text-sm">
           {chatMessages.map((msg, i) => (
-            <div key={i}>
+            <div key={i} className="flex flex-col">
               <div className="text-xs text-gray-400">{msg.time}</div>
-              <div className="bg-gray-900 p-2 rounded">
+              <div
+                className={`p-3 rounded-lg max-w-[85%]
+    ${
+      msg.role === "user"
+        ? "bg-blue-600 ml-auto text-white"
+        : "bg-gray-800 text-gray-100"
+    }`}
+              >
                 <ReactMarkdown>{msg.content}</ReactMarkdown>
               </div>
             </div>
