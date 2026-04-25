@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { getSuggestions } from "@/lib/getSuggestions";
 import { sendChat } from "@/lib/chat";
 import ReactMarkdown from "react-markdown";
-import { Download, Mic } from "lucide-react";
+import { Download, Mic, RotateCw } from "lucide-react";
 
 export default function Home() {
   const getTime = () => new Date().toLocaleTimeString();
@@ -35,6 +35,10 @@ Keep it short. No repetition.
 `;
 
   const generateSuggestions = async (fullTranscript) => {
+    if (!transcript || !transcript.trim()) {
+      return;
+    }
+
     if (isGeneratingRef.current) return;
     isGeneratingRef.current = true;
 
@@ -188,8 +192,14 @@ Keep it short. No repetition.
 
         <button
           onClick={() => generateSuggestions(transcript)}
-          className="mb-3 bg-gray-700 px-3 py-1 rounded"
+          disabled={!transcript.trim()}
+          className={`mb-3 px-3 py-1 rounded ${
+            transcript.trim()
+              ? "bg-gray-700 hover:bg-gray-600"
+              : "bg-gray-800 opacity-50 cursor-not-allowed"
+          }`}
         >
+          <RotateCw size={16} />
           Reload
         </button>
 
